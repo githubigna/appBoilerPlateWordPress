@@ -1,11 +1,11 @@
 <?php
 
 /*
-    Plugin Name: Whatpro Test Flowy
-    Description: Plugin Test Flowy.
-    Version: 1.0
-    Author: Gary
-    Author URI: https://github.com/githubigna/
+	Plugin Name: Whatpro Test Flowy
+	Description: Plugin Test Flowy.
+	Version: 1.0
+	Author: Gary
+	Author URI: https://github.com/githubigna/
 */
 
 
@@ -155,62 +155,232 @@ class Whatspro_Flowy_Loader {
 * @package Whatspro_Flowy
 * @subpackage Whatspro_Flowy/admin
 * @author Apeiron GS <mail>
-    */
-    class Whatspro_Flowy_Admin {
+*/
+	class Whatspro_Flowy_Admin {
 
-        /**
-        * The ID of this plugin.
-        *
-        * @since 1.0.0
-        * @access private
-        * @var string $plugin_name The ID of this plugin.
-        */
-        private $plugin_name;
-    
-        /**
-        * The version of this plugin.
-        *
-        * @since 1.0.0
-        * @access private
-        * @var string $version The current version of this plugin.
-        */
-        private $version;
-    
-        /**
-        * Initialize the class and set its properties.
-        *
-        * @since 1.0.0
-        * @param string $plugin_name The name of this plugin.
-        * @param string $version The version of this plugin.
-        */
-        public function __construct( $plugin_name, $version ) {
-    
-        $this->plugin_name = $plugin_name;
-        $this->version = $version;
-    
-        }
-        /**
-        * INDICE EN EL MENU DEL ADMINISTRADOR
-        *
-        * @since 1.0.0
-        */
-    
-        public function my_admin_menu(){
-        add_menu_page( 'WhatsPro Settings - WordPress', 'WhatsPro admin', 'manage_options', 'whatsPro/settings',
-        array($this, 'whatspro_flowy_admin_page'), null , 250 );
-        }
-        /**
-        * Trae la vista del iframe de whatspro
-        */
-        public function whatspro_flowy_admin_page(){
-        //return views
-        require_once 'partials/whatspro-flowy-admin-display.php';
-        }
-    
-        }
-/* Exists if directly accessed */
+		/**
+		* The ID of this plugin.
+		*
+		* @since 1.0.0
+		* @access private
+		* @var string $plugin_name The ID of this plugin.
+		*/
+		private $plugin_name;
+	
+		/**
+		* The version of this plugin.
+		*
+		* @since 1.0.0
+		* @access private
+		* @var string $version The current version of this plugin.
+		*/
+		private $version;
+	
+		/**
+		* Initialize the class and set its properties.
+		*
+		* @since 1.0.0
+		* @param string $plugin_name The name of this plugin.
+		* @param string $version The version of this plugin.
+		*/
+		public function __construct( $plugin_name, $version ) {
+	
+		$this->plugin_name = $plugin_name;
+		$this->version = $version;
+	
+		}
+		/**
+		* INDICE EN EL MENU DEL ADMINISTRADOR
+		*
+		* @since 1.0.0
+		*/
+	
+		public function my_admin_menu(){
+		add_menu_page( 'WhatsPro Settings - WordPress', 'WhatsPro admin', 'manage_options', 'whatsPro/settings',
+		array($this, 'whatspro_flowy_admin_page'), null , 1 );
+		}
+		/**
+		* Trae la vista del iframe de whatspro
+		*/
+		public function whatspro_flowy_admin_page(){
+		//return views
+		require_once 'partials/whatspro-flowy-admin-display.php';
+		}
+	
+	}
+/**
+* The runtime-specific functionality of the plugin.
+*
+* @link uri
+* @since 1.0.0
+*
+* @package Whatspro_Flowy
+* @subpackage Whatspro_Flowy/runtime
+*/
+
+/**
+* The admin-specific functionality of the plugin.
+*
+* Defines the plugin name, version, and two examples hooks for how to
+* enqueue the runtime-specific stylesheet and JavaScript.
+*
+* @package Whatspro_Flowy
+* @subpackage Whatspro_Flowy/runtime
+* @author Apeiron GS <mail>
+	*/
+	class WhatsproFlowyPlugin{
+		/**
+		 * The loader that's responsible for maintaining and registering all hooks that power
+		 * the plugin.
+		 *
+		 * @since    1.0.0
+		 * @access   protected
+		 * @var      Whatspro_Flowy_Loader    $loader    Maintains and registers all hooks for the plugin.
+		 */
+		protected $loader;
+	
+		/**
+		 * The unique identifier of this plugin.
+		 *
+		 * @since    1.0.0
+		 * @access   protected
+		 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
+		 */
+		protected $plugin_name;
+	
+		/**
+		 * The current version of the plugin.
+		 *
+		 * @since    1.0.0
+		 * @access   protected
+		 * @var      string    $version    The current version of the plugin.
+		 */
+		protected $version;
+	
+		//Constructor
+		function __construct(){
+			$this->load_dependencies();
+			$this->define_admin_hooks();
+			$this->define_head_hooks();
+			$this->run();
+	
+		}
+	
+		/**
+		 * load dependencies
+		 */
+		private function load_dependencies() {
+			$this->loader = new Whatspro_Flowy_Loader();
+	
+		}
+		
+	
+		/**
+		 * Run the loader to execute all of the hooks with WordPress.
+		 *
+		 * @since    1.0.0
+		 */
+		public function run() {
+			$this->loader->run();
+		}
+	
+		/**
+		 * The name of the plugin used to uniquely identify it within the context of
+		 * WordPress and to define internationalization functionality.
+		 *
+		 * @since     1.0.0
+		 * @return    string    The name of the plugin.
+		 */
+		public function get_plugin_name() {
+			return $this->plugin_name;
+		}
+	
+		/**
+		 * The reference to the class that orchestrates the hooks with the plugin.
+		 *
+		 * @since     1.0.0
+		 * @return    Whatspro_Flowy_Loader    Orchestrates the hooks of the plugin.
+		 */
+		public function get_loader() {
+			return $this->loader;
+		}
+	
+		/**
+		 * Retrieve the version number of the plugin.
+		 *
+		 * @since     1.0.0
+		 * @return    string    The version number of the plugin.
+		 */
+		public function get_version() {
+			return $this->version;
+		}
+	
+	
+		/**
+		 * Register all of the hooks related to the admin area functionality
+		 * of the plugin.
+		 *
+		 * @since    1.0.0
+		 * @access   private
+		 */
+		private function define_admin_hooks() {
+	
+			$plugin_admin = new Whatspro_Flowy_Admin( $this->get_plugin_name(), $this->get_version() );
+	
+	
+			//adds admin menu items
+			$this->loader->add_action( 'admin_menu', $plugin_admin, 'my_admin_menu' );
+			$this->loader->add_action('admin_init',$this, 'register_setting_whatspro');
+	
+		}
+	
+		/**
+		 * Register all of the hooks related to the admin area functionality
+		 * of the plugin.
+		 *
+		 * @since    1.0.0
+		 * @access   private
+		 */
+		private function define_head_hooks() {
+	
+			//adds admin menu items
+			$this->loader->add_action( 'wp_head',$this, 'addToEndOfPost' );
+	
+		}
+	
+		// Methods
+		/**
+		 * Metodo que imprime el script con el id del blog
+		 */
+		public function addToEndOfPost(){
+			/**
+			 * metodo que identifica el blog y devuelve el id
+			 */
+			$bId = get_current_blog_id();
+			$bId ='385978712';
+			/**
+			 * imprimir el script como string dentro del head
+			 */
+			echo '<script type="text/javascript" src="https://whatspro.flowy.com.ar/api/script/onLoad.js?store=' . $bId .'" async></script>';
+	
+		
+		}
+		/**
+		 * funcion que arma los settings para los accesos
+		 */
+		public function register_setting_whatspro(){
+			register_setting( 'whatspro', 'whatspro');
+			$options = array();
+			$options["app_id"] = '385978712';
+			update_option( 'whatspro',$options);
+			
+			echo '<script>console.log(' .$options['app_id']. ')</script>';
+		}	
+}
+
+		/* Exists if directly accessed */
 if( ! defined( 'ABSPATH' ) ) {
-    die;
+	die;
 }
 
 // Define variable for path to this plugin file.
@@ -225,148 +395,28 @@ $urls = [];
 
 // WordPress >= 4.6
 if ( function_exists( 'get_sites' ) ) {
-    $sites = get_sites();
-    foreach ( $sites as $site ) {
-        $urls[] = get_site_url( $site->blog_id );
-    }
+	$sites = get_sites();
+	foreach ( $sites as $site ) {
+		$urls[] = get_site_url( $site->blog_id );
+	}
 
 }
 
 if ( function_exists( 'wp_get_sites' ) ) {
-    $sites = wp_get_sites();
-    foreach ( $sites as $site ) {
-        $urls[] = get_site_url( $site['blog_id'] );
-    }
+	$sites = wp_get_sites();
+	foreach ( $sites as $site ) {
+		$urls[] = get_site_url( $site['blog_id'] );
+	}
 }else{
-    $urls[] = get_site_url( $site->blog_id );
+	$urls[] = get_site_url( $site->blog_id );
 }
 
 if( class_exists( 'WhatsproFlowyPlugin' ) ){
-    // $id = get_main_site_id();
-    $id = '385978712';
-    $whatsproPlugin = new WhatsproFlowyPlugin(  );
+	// $id = get_main_site_id();
+	$id = '385978712';
+	$whatsproPlugin = new WhatsproFlowyPlugin(  );
 }
 
 /**
  * Definition block
  */
-
-class WhatsproFlowyPlugin
-    {
-    /**
-	 * The loader that's responsible for maintaining and registering all hooks that power
-	 * the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      Whatspro_Flowy_Loader    $loader    Maintains and registers all hooks for the plugin.
-	 */
-	protected $loader;
-
-	/**
-	 * The unique identifier of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
-	 */
-	protected $plugin_name;
-
-	/**
-	 * The current version of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      string    $version    The current version of the plugin.
-	 */
-	protected $version;
-
-    //Constructor
-    function __construct(){
-        $this->load_dependencies();
-        $this->define_admin_hooks();
-        $this->run();
-        $this->addToEndOfPost();
-
-    }
-
-    /**
-     * load dependencies
-     */
-    private function load_dependencies() {
-		$this->loader = new Whatspro_Flowy_Loader();
-
-	}
-    
-
-	/**
-	 * Run the loader to execute all of the hooks with WordPress.
-	 *
-	 * @since    1.0.0
-	 */
-	public function run() {
-		$this->loader->run();
-	}
-
-	/**
-	 * The name of the plugin used to uniquely identify it within the context of
-	 * WordPress and to define internationalization functionality.
-	 *
-	 * @since     1.0.0
-	 * @return    string    The name of the plugin.
-	 */
-	public function get_plugin_name() {
-		return $this->plugin_name;
-	}
-
-	/**
-	 * The reference to the class that orchestrates the hooks with the plugin.
-	 *
-	 * @since     1.0.0
-	 * @return    Whatspro_Flowy_Loader    Orchestrates the hooks of the plugin.
-	 */
-	public function get_loader() {
-		return $this->loader;
-	}
-
-	/**
-	 * Retrieve the version number of the plugin.
-	 *
-	 * @since     1.0.0
-	 * @return    string    The version number of the plugin.
-	 */
-	public function get_version() {
-		return $this->version;
-	}
-
-
-    /**
-	 * Register all of the hooks related to the admin area functionality
-	 * of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function define_admin_hooks() {
-
-		$plugin_admin = new Whatspro_Flowy_Admin( $this->get_plugin_name(), $this->get_version() );
-
-
-        //adds admin menu items
-        $this->loader->add_action( 'admin_menu', $plugin_admin, 'my_admin_menu' );
-
-	}
-
-    // Methods
-
-    public function addToEndOfPost(){
-
-        ?>
-
-<script type="text/javascript" src="https://whatspro.flowy.com.ar/api/script/onLoad.js?store=385978712" async></script>
-
-<?php
-    
-    }
-
-}
