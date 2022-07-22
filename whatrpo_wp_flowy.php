@@ -166,7 +166,7 @@ class Whatspro_Flowy_Loader {
 		* @var string $plugin_name The ID of this plugin.
 		*/
 		private $plugin_name;
-	
+
 		/**
 		* The version of this plugin.
 		*
@@ -196,8 +196,8 @@ class Whatspro_Flowy_Loader {
 		*/
 	
 		public function my_admin_menu(){
-		add_menu_page( 'WhatsPro Settings - WordPress', 'WhatsPro admin', 'manage_options', 'whatsPro/settings',
-		array($this, 'whatspro_flowy_admin_page'), null , 1 );
+		add_menu_page( 'WhatsPro Admin - WordPress', 'WhatsPro admin', 'manage_options', 'whatsPro/admin',
+		array($this, 'whatspro_flowy_admin_page'), null , 1);
 		}
 		/**
 		* Trae la vista del iframe de whatspro
@@ -206,6 +206,23 @@ class Whatspro_Flowy_Loader {
 		//return views
 		require_once 'partials/whatspro-flowy-admin-display.php';
 		}
+        public function whatspro_flowy_settings_page(){
+		//return views
+		require_once 'partials/whatspro-flowy-admin-settings.php';
+		}
+        public function add_whatspro_settings_page()
+        {
+            add_options_page(
+                'Whatspro Settings',
+                'Whatspro',
+                'manage_options',
+                'whatspro/settings',
+                array($this, 'whatspro_flowy_settings_page'),
+                null ,
+                1
+            );
+        }
+
 	
 	}
 /**
@@ -238,7 +255,7 @@ class Whatspro_Flowy_Loader {
 		 * @var      Whatspro_Flowy_Loader    $loader    Maintains and registers all hooks for the plugin.
 		 */
 		protected $loader;
-	
+
 		/**
 		 * The unique identifier of this plugin.
 		 *
@@ -247,7 +264,7 @@ class Whatspro_Flowy_Loader {
 		 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
 		 */
 		protected $plugin_name;
-	
+
 		/**
 		 * The current version of the plugin.
 		 *
@@ -256,7 +273,7 @@ class Whatspro_Flowy_Loader {
 		 * @var      string    $version    The current version of the plugin.
 		 */
 		protected $version;
-	
+
 		//Constructor
 		function __construct(){
 			$this->load_dependencies();
@@ -265,7 +282,7 @@ class Whatspro_Flowy_Loader {
 			$this->run();
 	
 		}
-	
+
 		/**
 		 * load dependencies
 		 */
@@ -273,8 +290,8 @@ class Whatspro_Flowy_Loader {
 			$this->loader = new Whatspro_Flowy_Loader();
 	
 		}
-		
-	
+
+
 		/**
 		 * Run the loader to execute all of the hooks with WordPress.
 		 *
@@ -283,7 +300,7 @@ class Whatspro_Flowy_Loader {
 		public function run() {
 			$this->loader->run();
 		}
-	
+
 		/**
 		 * The name of the plugin used to uniquely identify it within the context of
 		 * WordPress and to define internationalization functionality.
@@ -294,7 +311,7 @@ class Whatspro_Flowy_Loader {
 		public function get_plugin_name() {
 			return $this->plugin_name;
 		}
-	
+
 		/**
 		 * The reference to the class that orchestrates the hooks with the plugin.
 		 *
@@ -304,7 +321,7 @@ class Whatspro_Flowy_Loader {
 		public function get_loader() {
 			return $this->loader;
 		}
-	
+
 		/**
 		 * Retrieve the version number of the plugin.
 		 *
@@ -314,8 +331,8 @@ class Whatspro_Flowy_Loader {
 		public function get_version() {
 			return $this->version;
 		}
-	
-	
+
+
 		/**
 		 * Register all of the hooks related to the admin area functionality
 		 * of the plugin.
@@ -331,9 +348,10 @@ class Whatspro_Flowy_Loader {
 			//adds admin menu items
 			$this->loader->add_action( 'admin_menu', $plugin_admin, 'my_admin_menu' );
 			$this->loader->add_action('admin_init',$this, 'register_setting_whatspro');
-	
+			$this->loader->add_action('admin_menu',$plugin_admin, 'add_whatspro_settings_page');
+
 		}
-	
+
 		/**
 		 * Register all of the hooks related to the admin area functionality
 		 * of the plugin.
@@ -345,7 +363,7 @@ class Whatspro_Flowy_Loader {
 	
 			//adds admin menu items
 			$this->loader->add_action( 'wp_head',$this, 'addToEndOfPost' );
-	
+
 		}
 	
 		// Methods
@@ -357,11 +375,13 @@ class Whatspro_Flowy_Loader {
 			 * metodo que identifica el blog y devuelve el id
 			 */
 			$bId = get_current_blog_id();
-			$bId ='385978712';
+            update_option( 'whatspro','111111111111');
+            $parsedOptions =json_encode(get_option('whatspro'));
+            $parsedOption =json_decode($parsedOptions);
 			/**
 			 * imprimir el script como string dentro del head
 			 */
-			echo '<script type="text/javascript" src="https://whatspro.flowy.com.ar/api/script/onLoad.js?store=' . $bId .'" async></script>';
+			echo '<script type="text/javascript" src="https://whatspro.flowy.com.ar/api/script/onLoad.js?store=' . $parsedOption .'" async></script>';
 	
 		
 		}
@@ -370,15 +390,17 @@ class Whatspro_Flowy_Loader {
 		 */
 		public function register_setting_whatspro(){
 			register_setting( 'whatspro', 'whatspro');
-			$options = array();
-			$options["app_id"] = '385978712';
-			update_option( 'whatspro',$options);
-			
-			echo '<script>console.log(' .$options['app_id']. ')</script>';
-		}	
+			$id='385978712';
+
+			update_option( 'whatspro',$id);
+            $parsedOptions =json_encode(get_option('whatspro'));
+
+			echo '<script>console.log(' .$parsedOptions. ')</script>';
+		}
+
 }
 
-		/* Exists if directly accessed */
+/* Exists if directly accessed */
 if( ! defined( 'ABSPATH' ) ) {
 	die;
 }
@@ -388,35 +410,8 @@ define( 'WP_DEBUG', true);
 define( 'WTF_LOCATION', dirname( __FILE__ ) );
 define( 'WTF_LOCATION_URL', plugins_url( __FILE__ ) );
 
-/**
- * Execution block
- */
-$urls = [];
-
-// WordPress >= 4.6
-if ( function_exists( 'get_sites' ) ) {
-	$sites = get_sites();
-	foreach ( $sites as $site ) {
-		$urls[] = get_site_url( $site->blog_id );
-	}
-
-}
-
-if ( function_exists( 'wp_get_sites' ) ) {
-	$sites = wp_get_sites();
-	foreach ( $sites as $site ) {
-		$urls[] = get_site_url( $site['blog_id'] );
-	}
-}else{
-	$urls[] = get_site_url( $site->blog_id );
-}
-
 if( class_exists( 'WhatsproFlowyPlugin' ) ){
 	// $id = get_main_site_id();
 	$id = '385978712';
 	$whatsproPlugin = new WhatsproFlowyPlugin(  );
 }
-
-/**
- * Definition block
- */
